@@ -1,1 +1,1 @@
-# Sistema-Inteligencia-de-recomendaci-n-de-vacantes-
+# Sistema-Inteligencia-de-recomendacion-de-vacantes
