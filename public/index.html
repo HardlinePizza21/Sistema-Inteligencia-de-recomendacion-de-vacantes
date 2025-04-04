@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="favIcon.ico" type="image/x-icon">
+    <title>Bolsa de Trabajo</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            pointer-events: none;
+        }
+        .container {
+            width: 80%;
+            margin: 20px auto;
+            background: white;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            pointer-events: auto;
+        }
+        h2 {
+            text-align: center;
+        }
+        .search-bar {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            pointer-events: auto;
+        }
+        .job-listing {
+            border-bottom: 1px solid #ddd;
+            padding: 15px;
+            cursor: pointer;
+            pointer-events: auto;
+        }
+        .job-title {
+            font-size: 18px;
+            font-weight: bold;
+        }
+        .job-details {
+            font-size: 14px;
+            color: #555;
+        }
+        .popup {
+            display: none;
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: white;
+            padding: 15px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.3);
+            border-radius: 10px;
+            z-index: 1000;
+            width: 300px;
+            pointer-events: auto;
+        }
+        .popup-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: bold;
+        }
+        .popup button {
+            background: #007BFF;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
+            border-radius: 5px;
+            margin-top: 10px;
+        }
+        .popup button.close-btn {
+            background: none;
+            border: none;
+            font-size: 18px;
+            cursor: pointer;
+            color: #888;
+        }
+    </style>
+</head>
+<body>
+    <div class="popup" id="popup">
+        <div class="popup-header">
+            <span id="popup-question"></span>
+            <button class="close-btn" onclick="hidePopup()">×</button>
+        </div>
+        <div id="popup-content"></div>
+        <button onclick="savePreferences()">Guardar</button>
+    </div>
+
+    <div class="container">
+        <h2>Bolsa de Trabajo</h2>
+        <input type="text" id="search" class="search-bar" placeholder="Buscar empleo...">
+        <button id="btnSearch">Buscar Vacantes</button>
+        <br>
+        <br>
+        <div>
+            <input type="checkbox" id="filter" name="filter">
+            <label for="filter-remote">Buscar por contenido de toda la vacante</label>
+        </div>
+        <div id="job-list"></div>
+    </div>
+    
+    <script type="module" src="./clientLogic.js"></script>
+</body>
+</html>
