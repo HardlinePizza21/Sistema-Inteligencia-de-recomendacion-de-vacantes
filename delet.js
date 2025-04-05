@@ -11,6 +11,9 @@ async function deleteDocumentsWithEmbedding() {
 
         const result = await collection.deleteMany();
 
+        await collection.dropSearchIndex("vector_index")
+        await collection.dropSearchIndex("vector_index_by_nombre_vacante")
+
         console.log(result.deletedCount)
 
     } catch (error) {

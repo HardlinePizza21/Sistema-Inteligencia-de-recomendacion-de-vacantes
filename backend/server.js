@@ -5,7 +5,7 @@ import {query} from '../database/queryData.js'
 
 const app = express(); 
 
-const port = 3030
+const port = 5000
 
 
 app.use(express.json());

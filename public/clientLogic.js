@@ -1,3 +1,5 @@
+import { buildWeightedVacancyText } from './buildEmbeddigns.js';
+
 const input = document.getElementById('search')
 const filter = document.getElementById('filter')
 let vacantes = document.querySelectorAll('#job-listing');
@@ -5,12 +7,24 @@ const intereses = []
 
 const checkbox = document.getElementById('filter');
 
+
+
+const suggest = document.getElementById('btnSuggest').addEventListener('click', (event) =>{
+
+    const data = buildWeightedVacancyText(intereses);
+
+    console.log(data)
+
+    fetchJobs(data, "fullVacante")
+
+
+})
 const btn = document.getElementById('btnSearch').addEventListener('click', (event)=>{
     
-    let opt = 2
+    let opt = "porNombre"
 
     if(checkbox.checked){
-        opt = 1
+        opt = "fullVacante"
     }
 
 
@@ -20,7 +34,7 @@ const btn = document.getElementById('btnSearch').addEventListener('click', (even
 
 async function fetchJobs(term, opt) {
     
-    const response = await fetch("http://localhost:3030/search",{
+    const response = await fetch("http://localhost:5000/search",{
         headers: {
             'Content-Type': 'application/json',
         },
@@ -40,6 +54,9 @@ async function fetchJobs(term, opt) {
             <div class="job-title">${job.nombre_vacante}</div>
             <div class="job-company">${job.empresa} - ${job.ubicacion}</div>
             <div class="job-details">${job.salario.toLocaleString()}$</div>
+            <div class="job-keywords">
+                ${job.informacionAmpliada.palabrasClave.join(', ')}
+            </div>
         `;
         jobList.appendChild(jobElement);
     });
@@ -55,7 +72,8 @@ async function fetchJobs(term, opt) {
                 nombre_vacante: vacante.querySelector('.job-title').innerText,
                 empresa: empresa.trim(),
                 ubicacion: ubicacion.trim(),
-                salario: parseFloat(vacante.querySelector('.job-details').innerText.replace(/\./g, '').replace('$', '').trim())
+                salario: parseFloat(vacante.querySelector('.job-details').innerText.replace(/\./g, '').replace('$', '').trim()),
+                palabrasClave: vacante.querySelector('.job-keywords').innerText.split(', ').map(keyword => keyword.trim())
             });
 
             console.log(intereses)
