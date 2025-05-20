@@ -4,3 +4,10 @@ node_modules/
 package-lock.json
 
 .env
+asets/venv/
+# Ignore Python virtual environment
+venv/
+ENV/
+env/
+.venv/
+.python-version
