@@ -1,7 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import {query} from '../database/queryData.js'
-
+import 'dotenv/config'
 
 const app = express(); 
 
@@ -18,7 +18,7 @@ app.post('/search', async(req, res) => {
     const {term, limit, opt} = req.body
     
     const jobs = await query(term, limit, opt);
-
+    
     res.json(jobs);
     
 });

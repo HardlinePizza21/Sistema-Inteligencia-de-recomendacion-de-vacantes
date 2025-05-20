@@ -1,4 +1,5 @@
 import { MongoClient } from 'mongodb';
+import dotenv from 'dotenv/config'
 
 // connect to your Atlas deployment
 const client = new MongoClient("mongodb+srv://HardlinePizza21:samuel14madrid@vectorsearch.oqgdznm.mongodb.net/?retryWrites=true&w=majority&appName=VectorSearch");
@@ -18,7 +19,7 @@ async function run() {
               "type": "vector",
               "path": "embedding",
               "similarity": "dotProduct",
-              "numDimensions": 384
+              "numDimensions": parseInt(process.env.DIMENSION_NUM)
             }
           ]
         }

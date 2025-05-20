@@ -15,33 +15,47 @@ export const createEmbedding = async () => {
 
         const collection = client.db("mi_base_de_datos").collection("vacantes")
 
-        const vacantes = await collection.find().toArray();
+        let allEmbeddingsGenerated = false
 
-        const vacantesActualizadas = [];
+        while (!allEmbeddingsGenerated) {
 
-        await Promise.all(vacantes.map(async vacante => {
-
-            const data = buildWeightedVacancyText(vacante)
-
-            const embedding = await getEmbedding(data);
-
-            // Add the embedding to an array of update operations
-            vacantesActualizadas.push(
+            const vacantes = await collection.find(
                 {
-                    updateOne: {
-                        filter: { "_id": vacante._id },
-                        update: { $set: { "embedding": embedding } }
-                    }
+                    embedding: {$exists: false}
                 }
-            )
-        }));
+            ).limit(20).toArray();
 
-        // Continue processing documents if an error occurs during an operation
-        const options = { ordered: false };
-        // Update documents with the new embedding field
-        const result = await collection.bulkWrite(vacantesActualizadas, options);
+            if (vacantes.length == 0){
+                allEmbeddingsGenerated = true
+                console.log("All embeddings generated")
+                continue;
+            }
+            const vacantesActualizadas = [];
 
-        console.log("Count of documents updated: " + result.modifiedCount);
+            await Promise.all(vacantes.map(async vacante => {
+
+                const data = buildWeightedVacancyText(vacante)
+
+                const embedding = await getEmbedding(data);
+
+                // Add the embedding to an array of update operations
+                vacantesActualizadas.push(
+                    {
+                        updateOne: {
+                            filter: { "_id": vacante._id },
+                            update: { $set: { "embedding": embedding } }
+                        }
+                    }
+                )
+            }));
+
+            // Continue processing documents if an error occurs during an operation
+            const options = { ordered: false };
+            // Update documents with the new embedding field
+            const result = await collection.bulkWrite(vacantesActualizadas, options);
+
+            console.log("Count of documents updated: " + result.modifiedCount);
+        }
 
 
     } catch (e) {

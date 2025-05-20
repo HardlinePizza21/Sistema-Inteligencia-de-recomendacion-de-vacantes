@@ -15,8 +15,8 @@ export const query= async(userPreferences, limit = 5, opt = "porNombre") => {
         const database = client.db('mi_base_de_datos'); // Replace with your database name
         const collection = database.collection('vacantes'); // Replace with your collection name
 
-        const embeddingTerm = await getEmbedding(userPreferences);
-        
+        const embeddingTerm = await getEmbedding(userPreferences); 
+
         const results = await collection.aggregate([
             {
                 $vectorSearch: {

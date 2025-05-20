@@ -7,43 +7,38 @@ const intereses = []
 
 const checkbox = document.getElementById('filter');
 
+window.addEventListener('load', () => {
+    document.getElementById('btnSuggest').addEventListener('click', (event) => {
+
+        const data = buildWeightedVacancyText(intereses);
+
+        fetchJobs(data, "fullVacante")
+
+    })
+    document.getElementById('btnSearch').addEventListener('click', (event) => {
+
+        let opt = "porNombre"
+
+        if (checkbox.checked) {
+            opt = "fullVacante"
+        }
 
 
-const suggest = document.getElementById('btnSuggest').addEventListener('click', (event) =>{
+        fetchJobs(input.value, opt)
 
-    const data = buildWeightedVacancyText(intereses);
-
-    console.log(data)
-
-    fetchJobs(data, "fullVacante")
-
-
-})
-const btn = document.getElementById('btnSearch').addEventListener('click', (event)=>{
-    
-    let opt = "porNombre"
-
-    if(checkbox.checked){
-        opt = "fullVacante"
-    }
-
-
-    fetchJobs(input.value, opt)
-   
+    })
 })
 
 async function fetchJobs(term, opt) {
-    
-    const response = await fetch("http://localhost:5000/search",{
+
+    const response = await fetch("http://localhost:5000/search", {
         headers: {
             'Content-Type': 'application/json',
         },
-        method:'POST',
-        body: JSON.stringify({term:term,limit:10,opt:opt})
+        method: 'POST',
+        body: JSON.stringify({ term: term, limit: 10, opt: opt })
     });
     const jobs = await response.json()
-
-    console.log(jobs)
 
     const jobList = document.getElementById("job-list");
     jobList.innerHTML = '';
@@ -64,7 +59,7 @@ async function fetchJobs(term, opt) {
 
     vacantes = document.querySelectorAll('.job-listing');
 
-    vacantes.forEach((vacante)=>{
+    vacantes.forEach((vacante) => {
         vacante.addEventListener('click', () => {
 
             const [empresa, ubicacion] = vacante.querySelector('.job-company').innerText.split(' - ');

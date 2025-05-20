@@ -181,7 +181,7 @@ palabras_clave_base = {
 
 # Generar vacantes ficticias
 vacantes = []
-for _ in range(20):
+for _ in range(400):
     nombre_vacante = random.choice(list(nombresVacantes.keys()))
     
     empresa = random.choice(empresas[nombre_vacante]),
