@@ -97,3 +97,10 @@ h2 {
     cursor: pointer;
     color: #003366;
 }
+
+.logo-derecha {
+    float: right;
+    width: 150px;
+    margin: 15px;
+}
+
