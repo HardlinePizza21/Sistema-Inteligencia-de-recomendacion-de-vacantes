@@ -19,21 +19,4 @@ export const buildWeightedVacancyText = (data) => {
 
     return `${keyWords} ${title} ${salary} ${company}`
 
-
-
-    // if (Array.isArray(data)) {
-    //     data.map((vacante) => {
-    //         keyWords += `${vacante.nombre_vacante} `;
-    //         title += `${vacante.nombre_vacante} `;
-    //         salary += `${vacante.salario} `;
-    //         keyWords += `${vacante.nombre_vacante} `;
-    //     })
-    // }
-    // const repeatText = (text, weight) => text.repeat(weight);
-
-    // const repeatTextArray = (array, weight) => 
-    //     array.map(item => item.repeat(weight)).join(' ');
-
-    // return `Palabras clave:${keyWords} ${title} ${salary} ${company}`;
-
 }

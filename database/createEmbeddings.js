@@ -3,8 +3,6 @@ import { MongoClient } from "mongodb"
 import { getEmbedding } from "../services/getEmbedding.js";
 import { buildWeightedVacancyText } from "../services/buildEmbeddigns.js";
 
-
-
 export const createEmbedding = async () => {
 
     const client = new MongoClient("mongodb+srv://HardlinePizza21:samuel14madrid@vectorsearch.oqgdznm.mongodb.net/?retryWrites=true&w=majority&appName=VectorSearch")

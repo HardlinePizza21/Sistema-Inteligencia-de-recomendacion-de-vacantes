@@ -9,10 +9,13 @@ const port = 5000
 
 
 app.use(express.json());
+
 app.use(express.static('public'));
+
 app.use(cors({
     origin: '*'
 }))
+
 app.post('/search', async(req, res) => {
 
     const {term, limit, opt} = req.body

@@ -1,7 +1,6 @@
 import { MongoClient } from 'mongodb';
 import dotenv from 'dotenv/config'
 
-// connect to your Atlas deployment
 const client = new MongoClient("mongodb+srv://HardlinePizza21:samuel14madrid@vectorsearch.oqgdznm.mongodb.net/?retryWrites=true&w=majority&appName=VectorSearch");
 
 async function run() {
@@ -9,7 +8,6 @@ async function run() {
     const database = client.db("mi_base_de_datos");
     const collection = database.collection("vacantes");
    
-    // Define your Atlas Vector Search index
     const index = {
         name: "vector_index",
         type: "vectorSearch",
@@ -25,7 +23,6 @@ async function run() {
         }
     }
 
-    // Call the method to create the index
     const result = await collection.createSearchIndex(index);
     console.log(result);
   } finally {
