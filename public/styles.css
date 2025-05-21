@@ -21,6 +21,8 @@ body {
 h2 {
     text-align: center;
     color: #003366;
+    margin-top: 30px;
+    margin-right: 20px;
 }
 
 .search-bar {
@@ -101,6 +103,8 @@ h2 {
 .logo-derecha {
     float: right;
     width: 150px;
-    margin: 15px;
+    margin-top: 8px;
+    margin-bottom: 15px;
+    height: 80px;
 }
 
