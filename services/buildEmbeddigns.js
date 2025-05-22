@@ -8,8 +8,6 @@ export const buildWeightedVacancyText = (data, weights = {}) => {
         publishDateWeight = 1,
     } = weights;
 
-    const repeatText = (text, weight) => text.repeat(weight);
-
     const repeatTextArray = (array, weight) => 
         array.map(item => item.repeat(weight)).join(' ');
 
