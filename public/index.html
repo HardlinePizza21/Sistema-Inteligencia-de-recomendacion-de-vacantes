@@ -19,7 +19,7 @@
     </div>
 
     <div class="container">
-        <img src="/public/images/magneto_logo.jpeg" alt="Logo" class="logo-derecha">
+        <img src="/images/magneto_logo.jpeg" alt="Logo" class="logo-derecha">
         <h2>Bolsa de Trabajo</h2>
         <input type="text" id="search" class="search-bar" placeholder="Buscar empleo...">
         <button id="btnSearch">Buscar Vacantes</button>
@@ -33,6 +33,47 @@
         <div id="job-list"></div>
     </div>
     
+    <script>
+    const perguntasHabilidades = [
+        { 
+            id: 1,
+            pregunta: "Qué tan bueno te consideras trabajando en equipo?",
+            opciones: [
+                { id: 1, texto: "Nada bueno" },
+                { id: 2, texto: "Poco bueno" },
+                { id: 3, texto: "Regular" },
+                { id: 4, texto: "Bueno" },
+                { id: 5, texto: "Muy bueno" }
+            ]
+        },
+
+        {
+            id: 2, 
+            pregunta: "¿Que tan buena consideras tu comunicación acertiva?",
+            opciones: [
+                { id: 1, texto: "Nada bueno" },
+                { id: 2, texto: "Poco bueno" },
+                { id: 3, texto: "Regular" },
+                { id: 4, texto: "Bueno" },
+                { id: 5, texto: "Muy bueno" }
+            ]
+        },
+
+        {
+            id:3,
+            pregunt: "¿Como crees que trabajas bajo presión?",
+            opciones: [
+                { id: 1, texto: "Nada bueno" },
+                { id: 2, texto: "Poco bueno" },
+                { id: 3, texto: "Regular" },
+                { id: 4, texto: "Bueno" },
+                { id: 5, texto: "Muy bueno" }
+            ]
+
+        }
+    ]
+        </script>
     <script type="module" src="./clientLogic.js"></script>
+    
 </body>
 </html>
