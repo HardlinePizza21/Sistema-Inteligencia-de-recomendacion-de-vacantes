@@ -118,34 +118,37 @@ function mostrarPreguntaEnVacante(vacanteElement) {
     }
 
     const container = document.createElement('div');
-    container.classList.add('pregunta-container');
-    container.style.background = "#f0f0f0";
-    container.style.padding = "10px";
-    container.style.marginTop = "10px";
-    container.style.border = "1px solid #ccc";
-    container.style.borderRadius = "5px";
+    container.classList.add('job-listing', 'pregunta-container'); // Estilos iguales a las vacantes
 
     const preguntaHTML = `
-        <form id="formPreguntaDinamica">
-            <p><strong>${actual.pregunta}</strong></p>
-            ${actual.opciones.map(op => `
-                <label>
-                    <input type="radio" name="respuesta" value="${op.texto}" required> ${op.texto}
-                </label><br>
-            `).join('')}
-            <button type="submit" style="margin-top: 10px;">Responder</button>
-        </form>
+        <div class="job-title">${actual.pregunta}</div>
+        <div class="job-keywords">
+            <form id="formPreguntaDinamica">
+                ${actual.opciones.map(op => `
+                    <label>
+                        <input type="radio" name="respuesta" value="${op.texto}" required> ${op.texto}
+                    </label><br>
+                `).join('')}
+                <button type="submit" style="margin-top: 10px;">Responder</button>
+            </form>
+        </div>
     `;
 
     container.innerHTML = preguntaHTML;
-    vacanteElement.after(container);
+    vacanteElement.insertAdjacentElement('afterend', container); // Inserta justo después de la vacante
 
     document.getElementById('formPreguntaDinamica').addEventListener('submit', (e) => {
         e.preventDefault();
         const respuestaSeleccionada = document.querySelector('input[name="respuesta"]:checked')?.value;
         console.log(`Respuesta a "${actual.pregunta}": ${respuestaSeleccionada}`);
+
+        // Aquí puedes guardar la respuesta si deseas
+        // respuestas.push({ pregunta: actual.pregunta, respuesta: respuestaSeleccionada });
+
         container.remove();
         indexPregunta = (indexPregunta + 1) % preguntasHabilidades.length;
+        container.classList.add('job-listing', 'pregunta-container');
+
     });
 }
 
