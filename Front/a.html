@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Magneto Empleos</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: sans-serif;
+      background: #f9fafb;
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      pointer-events: none;
+      cursor: default;
+    }
+    header {
+      display: flex;
+      align-items: center;
+      padding: 1rem;
+      background: white;
+      border-bottom: 1px solid #ddd;
+    }   
+    .logo {
+      margin-right: auto;
+      font-weight: bold;
+      color: #00b96b;
+    }
+    .search-bar {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: #f4f4f7;
+      border-radius: 10px;
+      padding: 0.5rem 1rem;
+      flex-grow: 1;
+      max-width: 500px;
+      margin: auto;
+      pointer-events: auto;
+    }
+    .search-bar input {
+      border: none;
+      background: transparent;
+      outline: none;
+      width: 100%;
+      pointer-events: auto;
+      cursor: text;
+    }
+    main {
+      display: flex;
+      flex: 1;
+    }
+    aside {
+      width: 250px;
+      background: #fff;
+      padding: 1rem;
+      border-right: 1px solid #ddd;
+      pointer-events: auto;
+    }
+    aside .box {
+      background: #f3f4f6;
+      padding: 1rem;
+      border-radius: 0.75rem;
+      margin-bottom: 1rem;
+    }
+    aside input {
+      pointer-events: auto;
+      cursor: text;
+    }
+    .job-list, .job-detail {
+      flex: 1;
+      overflow-y: auto;
+    }
+    .job-list {
+      border-right: 1px solid #ddd;
+      pointer-events: auto;
+    }
+    .job-list-header {
+      padding: 1rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #fff;
+      border-bottom: 1px solid #ddd;
+      pointer-events: none;
+    }
+    .job-card {
+      padding: 1rem;
+      background: #e5e7eb;
+      margin: 1rem;
+      border-radius: 0.75rem;
+      cursor: pointer;
+      pointer-events: auto;
+      user-select: none;
+      transition: background-color 0.2s ease;
+    }
+    .job-card:hover {
+      background: #d1d5db;
+    }
+    .job-detail {
+      padding: 1rem;
+      pointer-events: auto;
+    }
+    .pill {
+      display: inline-block;
+      background: #f3f4f6;
+      padding: 0.25rem 0.5rem;
+      border-radius: 0.5rem;
+      margin: 0.25rem 0;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo">magneto <span style="color: #6b7280">empleos</span></div>
+    <div class="search-bar">
+      <input id="search" placeholder="Buscar empleo..." />
+    </div>
+  </header>
+  <main>
+    <aside>
+      <div class="box">
+        <strong>Filtrar empleos</strong>
+        <div style="margin-top: 1rem">
+          <label>Sector laboral</label>
+          <input id="sectorFilter" placeholder="Buscar sector..." style="width: 100%; margin-top: 0.5rem" />
+        </div>
+      </div>
+    </aside>
+    <section class="job-list">
+      <div class="job-list-header">
+        <strong id="resultCount">0 cupos</strong>
+      </div>
+      <div id="jobs"></div>
+    </section>
+    <section class="job-detail" id="jobDetail">
+      <p>Selecciona una vacante para ver los detalles</p>
+    </section>
+  </main>
+
+  <script>
+    const jobsContainer = document.getElementById("jobs");
+    const jobDetail = document.getElementById("jobDetail");
+    const resultCount = document.getElementById("resultCount");
+    const searchInput = document.getElementById("search");
+
+    let allJobs = [];
+
+    async function fetchJobs() {
+  try {
+    const res = await fetch("");
+    if (!res.ok) throw new Error("Error al cargar las ofertas");
+    allJobs = await res.json();
+    renderJobs(allJobs);
+  } catch (error) {
+    jobsContainer.innerHTML = `<p style="padding:1rem; color:red;">Error al cargar las ofertas</p>`;
+    jobDetail.innerHTML = "";
+  }
+}
+
+
+function renderJobs(jobs) {
+  jobsContainer.innerHTML = "";
+  resultCount.textContent = `${jobs.length} cupos`;
+  if (jobs.length === 0) {
+    jobsContainer.innerHTML = "<p style='padding: 1rem;'>No se encontraron ofertas</p>";
+    jobDetail.innerHTML = "";
+    return;
+  }
+  jobs.forEach((job) => {
+    const div = document.createElement("div");
+    div.className = "job-card";
+    div.innerHTML = `
+      <strong>${job.nombre_vacante}</strong><br />
+      ${job.empresa} | ${job.tipo_contrato.tipo}<br />
+      ${job.salario}, ${job.ubicacion}
+    `;
+    div.addEventListener("click", () => {
+      renderJobDetail(job);
+    });
+    jobsContainer.appendChild(div);
+  });
+}
+
+function renderJobDetail(job) {
+  jobDetail.innerHTML = `
+    <h3>${job.nombre_vacante}</h3>
+    <p><strong>${job.empresa}</strong></p>
+    <p>${job.tipo_contrato.tipo}</p>
+    <p>${job.salario}</p>
+    <p>${job.ubicacion}</p>
+    <p>${job.requisitos.experiencia}</p>
+    <div><strong>Palabras clave:</strong><br />
+      ${job.informacionAmpliada.palabrasClave.map(k => `<span class="pill">${k}</span>`).join(" ")}
+    </div>
+  `;
+}
+ 
+    searchInput.addEventListener("input", () => {
+      const query = searchInput.value.toLowerCase();
+      const filtered = allJobs.filter(j => j.title.toLowerCase().includes(query));
+      renderJobs(filtered);
+      jobDetail.innerHTML = "<p>Selecciona una vacante para ver los detalles</p>";
+    });
+
+    fetchJobs();
+  </script>
+</body>
+</html>
