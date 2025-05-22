@@ -34,77 +34,95 @@
     </div>
     
     <script>
-const preguntasHabilidades = [
-    { 
-        id: 1,
-        pregunta: "¿Qué tan bueno te consideras trabajando en equipo?",
-        opciones: [
-            { id: 1, texto: "Nada bueno" },
-            { id: 2, texto: "Poco bueno" },
-            { id: 3, texto: "Regular" },
-            { id: 4, texto: "Bueno" },
-            { id: 5, texto: "Muy bueno" }
-        ]
-    },
-    {
-        id: 2, 
-        pregunta: "¿Qué tan buena consideras tu comunicación asertiva?",
-        opciones: [
-            { id: 1, texto: "Nada buena" },
-            { id: 2, texto: "Poco buena" },
-            { id: 3, texto: "Regular" },
-            { id: 4, texto: "Buena" },
-            { id: 5, texto: "Muy buena" }
-        ]
-    },
-    {
-        id: 3,
-        pregunta: "¿Cómo crees que trabajas bajo presión?",
-        opciones: [
-            { id: 1, texto: "Nada bien" },
-            { id: 2, texto: "Poco bien" },
-            { id: 3, texto: "Regular" },
-            { id: 4, texto: "Bien" },
-            { id: 5, texto: "Muy bien" }
-        ]
+    const preguntasHabilidades = [
+        { 
+            id: 1,
+            pregunta: "¿Qué tan bueno te consideras trabajando en equipo?",
+            opciones: [
+                { id: 1, texto: "Nada bueno" },
+                { id: 2, texto: "Poco bueno" },
+                { id: 3, texto: "Regular" },
+                { id: 4, texto: "Bueno" },
+                { id: 5, texto: "Muy bueno" }
+            ]
+        },
+        {
+            id: 2, 
+            pregunta: "¿Qué tan buena consideras tu comunicación asertiva?",
+            opciones: [
+                { id: 1, texto: "Nada buena" },
+                { id: 2, texto: "Poco buena" },
+                { id: 3, texto: "Regular" },
+                { id: 4, texto: "Buena" },
+                { id: 5, texto: "Muy buena" }
+            ]
+        },
+        {
+            id: 3,
+            pregunta: "¿Cómo crees que trabajas bajo presión?",
+            opciones: [
+                { id: 1, texto: "Nada bien" },
+                { id: 2, texto: "Poco bien" },
+                { id: 3, texto: "Regular" },
+                { id: 4, texto: "Bien" },
+                { id: 5, texto: "Muy bien" }
+            ]
+        }
+    ];
+
+    let currentQuestion = 0;
+    const popup = document.getElementById('popup');
+    const popupQuestion = document.getElementById('popup-question');
+    const popupContent = document.getElementById('popup-content');
+
+    function showPopup() {
+        popup.classList.add('show');
+        mostrarPregunta(currentQuestion);
     }
-];
 
-let indexPregunta = 0;
+    function hidePopup() {
+        popup.classList.remove('show');
+    }
 
-function mostrarPregunta() {
-    const popup = document.getElementById("popupPregunta");
-    const texto = document.getElementById("textoPregunta");
-    const opcionesContainer = document.getElementById("opciones");
+    function mostrarPregunta(index) {
+        const pregunta = preguntasHabilidades[index];
+        if (!pregunta) {
+            hidePopup();
+            return;
+        }
 
-    const actual = preguntasHabilidades[indexPregunta];
-    texto.textContent = actual.pregunta;
+        popupQuestion.innerText = pregunta.pregunta;
+        popupContent.innerHTML = '';
 
-    opcionesContainer.innerHTML = "";
-    actual.opciones.forEach(op => {
-        const label = document.createElement("label");
-        label.innerHTML = `<input type="radio" name="respuesta" value="${op.texto}"> ${op.texto}`;
-        opcionesContainer.appendChild(label);
-        opcionesContainer.appendChild(document.createElement("br"));
-    });
+        pregunta.opciones.forEach(op => {
+            const btn = document.createElement('button');
+            btn.innerText = op.texto;
+            btn.onclick = () => {
+                guardarRespuesta(pregunta.id, op.id);
+                siguientePregunta();
+            };
+            popupContent.appendChild(btn);
+        });
+    }
 
-    popup.style.display = "block";
-}
+    function guardarRespuesta(preguntaId, respuestaId) {
+        console.log(`Respuesta guardada: Pregunta ${preguntaId} - Opción ${respuestaId}`);
+        // Aquí puedes guardar en localStorage, backend, etc.
+    }
 
-function ocultarPregunta() {
-    document.getElementById("popupPregunta").style.display = "none";
-    indexPregunta = (indexPregunta + 1) % preguntasHabilidades.length;
-}
+    function siguientePregunta() {
+        popup.classList.add('fade-out');
+        setTimeout(() => {
+            popup.classList.remove('fade-out');
+            currentQuestion++;
+            mostrarPregunta(currentQuestion);
+        }, 300); // tiempo de desvanecimiento
+    }
 
-document.getElementById("formPregunta").addEventListener("submit", function(e) {
-    e.preventDefault();
-    ocultarPregunta();
-});
-
-const inputBusqueda = document.querySelector("input[type='text']");
-inputBusqueda.addEventListener("input", function () {
-    mostrarPregunta();
-});
+    // Mostrar automáticamente al cargar la página
+    window.onload = () => {
+        showPopup();
+    };
 </script>
     <script type="module" src="./clientLogic.js"></script>
     
