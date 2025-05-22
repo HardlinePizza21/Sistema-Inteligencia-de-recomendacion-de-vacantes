@@ -34,45 +34,78 @@
     </div>
     
     <script>
-    const perguntasHabilidades = [
-        { 
-            id: 1,
-            pregunta: "Qué tan bueno te consideras trabajando en equipo?",
-            opciones: [
-                { id: 1, texto: "Nada bueno" },
-                { id: 2, texto: "Poco bueno" },
-                { id: 3, texto: "Regular" },
-                { id: 4, texto: "Bueno" },
-                { id: 5, texto: "Muy bueno" }
-            ]
-        },
+const preguntasHabilidades = [
+    { 
+        id: 1,
+        pregunta: "¿Qué tan bueno te consideras trabajando en equipo?",
+        opciones: [
+            { id: 1, texto: "Nada bueno" },
+            { id: 2, texto: "Poco bueno" },
+            { id: 3, texto: "Regular" },
+            { id: 4, texto: "Bueno" },
+            { id: 5, texto: "Muy bueno" }
+        ]
+    },
+    {
+        id: 2, 
+        pregunta: "¿Qué tan buena consideras tu comunicación asertiva?",
+        opciones: [
+            { id: 1, texto: "Nada buena" },
+            { id: 2, texto: "Poco buena" },
+            { id: 3, texto: "Regular" },
+            { id: 4, texto: "Buena" },
+            { id: 5, texto: "Muy buena" }
+        ]
+    },
+    {
+        id: 3,
+        pregunta: "¿Cómo crees que trabajas bajo presión?",
+        opciones: [
+            { id: 1, texto: "Nada bien" },
+            { id: 2, texto: "Poco bien" },
+            { id: 3, texto: "Regular" },
+            { id: 4, texto: "Bien" },
+            { id: 5, texto: "Muy bien" }
+        ]
+    }
+];
 
-        {
-            id: 2, 
-            pregunta: "¿Que tan buena consideras tu comunicación acertiva?",
-            opciones: [
-                { id: 1, texto: "Nada bueno" },
-                { id: 2, texto: "Poco bueno" },
-                { id: 3, texto: "Regular" },
-                { id: 4, texto: "Bueno" },
-                { id: 5, texto: "Muy bueno" }
-            ]
-        },
+let indexPregunta = 0;
 
-        {
-            id:3,
-            pregunt: "¿Como crees que trabajas bajo presión?",
-            opciones: [
-                { id: 1, texto: "Nada bueno" },
-                { id: 2, texto: "Poco bueno" },
-                { id: 3, texto: "Regular" },
-                { id: 4, texto: "Bueno" },
-                { id: 5, texto: "Muy bueno" }
-            ]
+function mostrarPregunta() {
+    const popup = document.getElementById("popupPregunta");
+    const texto = document.getElementById("textoPregunta");
+    const opcionesContainer = document.getElementById("opciones");
 
-        }
-    ]
-        </script>
+    const actual = preguntasHabilidades[indexPregunta];
+    texto.textContent = actual.pregunta;
+
+    opcionesContainer.innerHTML = "";
+    actual.opciones.forEach(op => {
+        const label = document.createElement("label");
+        label.innerHTML = `<input type="radio" name="respuesta" value="${op.texto}"> ${op.texto}`;
+        opcionesContainer.appendChild(label);
+        opcionesContainer.appendChild(document.createElement("br"));
+    });
+
+    popup.style.display = "block";
+}
+
+function ocultarPregunta() {
+    document.getElementById("popupPregunta").style.display = "none";
+    indexPregunta = (indexPregunta + 1) % preguntasHabilidades.length;
+}
+
+document.getElementById("formPregunta").addEventListener("submit", function(e) {
+    e.preventDefault();
+    ocultarPregunta();
+});
+
+const inputBusqueda = document.querySelector("input[type='text']");
+inputBusqueda.addEventListener("input", function () {
+    mostrarPregunta();
+});
+</script>
     <script type="module" src="./clientLogic.js"></script>
     
 </body>

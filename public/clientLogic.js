@@ -54,6 +54,7 @@ async function fetchJobs(term, opt) {
             </div>
         `;
         jobList.appendChild(jobElement);
+        
     });
 
 
@@ -75,7 +76,7 @@ async function fetchJobs(term, opt) {
 
         })
     })
-
+   
 }
 
 // const questions = [
