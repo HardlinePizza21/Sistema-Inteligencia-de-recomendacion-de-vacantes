@@ -34,6 +34,8 @@ export const createEmbedding = async () => {
 
                 const data = buildWeightedVacancyText(vacante)
 
+                console.log(data)
+
                 const embedding = await getEmbedding(data);
 
                 // Add the embedding to an array of update operations

@@ -17,7 +17,7 @@ nombresVacantes = {
   "Auxiliar Motorizados Con O Sin Experiencia Para Mosquera Cundinamarca": [random.randint(1422000, 2500000) for _ in range(5)],
   "Motorizado con o sin experiencia": [random.randint(1423000, 2500000) for _ in range(5)],
   "Bachilleres con o sin experiencia con moto para Entrega publicitaria": [random.randint(1423000, 2500000) for _ in range(5)],
-    "Arquitecto Soluciones": [random.randint(7000000, 8000000) for _ in range(5)],
+  "Arquitecto Soluciones": [random.randint(7000000, 8000000) for _ in range(5)],
   "Desarrollador Backend": [random.randint(5000000, 6000000) for _ in range(5)],
   "Ingeniero de Plataforma y Nube": [random.randint(6000000, 7000000) for _ in range(5)],
   "Desarrollador Backend Node JS": [random.randint(7000000, 8000000) for _ in range(5)], 
@@ -181,7 +181,7 @@ palabras_clave_base = {
 
 # Generar vacantes ficticias
 vacantes = []
-for _ in range(400):
+for _ in range(5):
     nombre_vacante = random.choice(list(nombresVacantes.keys()))
     
     empresa = random.choice(empresas[nombre_vacante]),
@@ -221,14 +221,11 @@ for _ in range(400):
         "tipo_contrato": contrato,
         "salario": random.choice(nombresVacantes[nombre_vacante]),
         "requisitos": requisitos,
-        "informacionAmpliada": info_ampliada
+        "informacionAmpliada": info_ampliada,
+        "fecha_publicacion": fake.date_time_between(start_date='-30d', end_date='now')
     }
     vacantes.append(vacante)
     
-    
-# * mprimir las vacantes generadas
-for vacante in vacantes:
-  print(json.dumps(vacante, indent=4, ensure_ascii=False))
 
 # Conectar a la base de datos MongoDB
 client = MongoClient("mongodb+srv://HardlinePizza21:samuel14madrid@vectorsearch.oqgdznm.mongodb.net/?retryWrites=true&w=majority&appName=VectorSearch")
