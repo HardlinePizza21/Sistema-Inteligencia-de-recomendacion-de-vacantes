@@ -1,10 +1,162 @@
 body {
-    font-family: Arial, sans-serif;
-    background-color: #ffffff; /* fondo blanco */
-    color: #003366; /* azul oscuro para el texto */
-    margin: 0;
-    padding: 0;
-    pointer-events: none;
+     margin: 0;
+        font-family: sans-serif;
+        background: #f9fafb;
+        display: flex;
+        flex-direction: column;
+        height: 100vh;
+        color: #003366;
+}
+
+header {
+    display: flex;
+    align-items: center;
+    padding: 1rem;
+    background: white;
+    border-bottom: 1px solid #ddd;
+}
+
+.logo {
+    margin-right: auto;
+    font-weight: bold;
+    color: #00b96b;
+}
+
+.search-bar {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: #f4f4f7;
+    border-radius: 10px;
+    padding: 0.5rem 1rem;
+    flex-grow: 1;
+    max-width: 800px;
+    margin: auto;
+    pointer-events: auto;
+}
+
+.search-bar input[type="text"],
+.search-bar input[type="checkbox"],
+.search-bar button,
+.search-bar label {
+    pointer-events: auto;
+    cursor: auto;
+}
+
+.search-bar input[type="text"] {
+    border: none;
+    background: transparent;
+    outline: none;
+    width: 100%;
+    cursor: text;
+    color: #003366;
+}
+
+main {
+    display: flex;
+    flex: 1;
+    overflow-y: hidden;
+}
+
+aside {
+    width: 250px;
+    background: #fff;
+    padding: 1rem;
+    border-right: 1px solid #ddd;
+    pointer-events: auto;
+    overflow-y: auto;
+}
+
+aside .box {
+    background: #f3f4f6;
+    padding: 1rem;
+    border-radius: 0.75rem;
+    margin-bottom: 1rem;
+}
+
+aside input {
+    pointer-events: auto;
+    cursor: text;
+    width: calc(100% - 1rem);
+    padding: 0.5rem;
+    box-sizing: border-box;
+    color: #003366;
+    background-color: #f9f9f9;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.job-list, .job-detail {
+    flex: 1;
+    overflow-y: auto;
+    padding: 1rem;
+    pointer-events: auto;
+}
+
+.job-list {
+    border-right: 1px solid #ddd;
+}
+
+.job-list-header {
+    padding: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #fff;
+    border-bottom: 1px solid #ddd;
+}
+
+.job-card {
+    padding: 1rem;
+    background: #e5e7eb;
+    margin: 1rem 0;
+    border-radius: 0.75rem;
+    cursor: pointer;
+    pointer-events: auto;
+    user-select: none;
+    transition: background-color 0.2s ease;
+    color: #003366;
+    border-bottom: 1px solid #ddd;
+}
+
+.job-card:hover {
+    background: #d1d5db;
+}
+
+.job-title {
+    font-size: 18px;
+    font-weight: bold;
+    color: #003366;
+}
+
+.job-details-text { /* Renamed from .job-details to avoid conflict if any */
+    font-size: 14px;
+    color: #00509e;
+}
+
+.pill {
+    display: inline-block;
+    background: #f3f4f6;
+    color: #374151;
+    padding: 0.25rem 0.75rem;
+    border-radius: 9999px;
+    margin: 0.25rem;
+    font-size: 0.8rem;
+}
+
+button {
+    cursor: pointer;
+    background: #00b96b;
+    color: white;
+    border: none;
+    padding: 0.6rem 1rem;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    transition: background-color 0.2s ease;
+}
+
+button:hover {
+    background: #029a5c;
 }
 
 .container {
@@ -17,35 +169,30 @@ body {
     pointer-events: auto;
     border-radius: 10px;
 }
+
 .pregunta-container {
-  position: static !important;
-  transform: none !important;
-  box-shadow: none !important;
-  max-width: 100% !important;
-  margin: 10px 0 !important;
+    position: static !important;
+    transform: none !important;
+    box-shadow: none !important;
+    max-width: 100% !important;
+    margin: 10px 0 !important;
+    padding: 15px;
+    background-color: #f5f5f5;
+    border-radius: 5px;
+    color: #003366;
+    border-bottom: 1px solid #ddd;
 }
 
 
 h2 {
     text-align: center;
     color: #003366;
-    margin-top: 30px;
-    margin-right: 20px;
+    margin-top: 0; /* Adjusted from original for modal */
+    margin-bottom: 15px;
+    font-size: 1.4em;
 }
 
-.search-bar {
-    width: 100%;
-    padding: 10px;
-    font-size: 16px;
-    margin-bottom: 20px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    color: #003366;
-    background-color: #f9f9f9;
-    pointer-events: auto;
-}
-
-.job-listing {
+.job-listing { /* This class was used by clientLogic.js for generated cards */
     border-bottom: 1px solid #ddd;
     padding: 15px;
     cursor: pointer;
@@ -116,49 +263,82 @@ h2 {
     height: 80px;
 }
 
-.popup {
-    display: none;
-    position: fixed;
-    top: 20%;
-    left: 50%;
-    transform: translate(-50%, -20%);
-    background-color: white;
-    padding: 20px;
-    border: 2px solid #333;
-    border-radius: 8px;
-    z-index: 1000;
-    box-shadow: 0 0 15px rgba(0,0,0,0.3);
-    opacity: 0;
-    transition: opacity 0.3s ease;
+.modal-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.65);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 1000;
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.3s ease, visibility 0.3s ease;
 }
 
-.popup.show {
-    display: block;
+.modal-overlay.visible {
     opacity: 1;
+    visibility: visible;
 }
 
-.popup.fade-out {
-    opacity: 0;
+.modal-content {
+    background-color: #fff;
+    padding: 25px 30px;
+    border-radius: 10px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.25);
+    width: 90%;
+    max-width: 550px;
+    text-align: center;
+    position: relative;
+    transform: scale(0.95);
+    transition: transform 0.3s ease;
 }
 
-.popup-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 10px;
+.modal-overlay.visible .modal-content {
+    transform: scale(1);
 }
 
-.close-btn {
-    background: none;
-    border: none;
-    font-size: 20px;
+.modal-close-btn {
+    position: absolute;
+    top: 12px;
+    right: 15px;
+    font-size: 2rem;
+    color: #aaa;
     cursor: pointer;
+    line-height: 1;
+    transition: color 0.2s ease;
 }
 
-#popup-content button {
-    display: block;
-    margin: 5px 0;
-    width: 100%;
-    padding: 8px;
-    cursor: pointer;
+.modal-close-btn:hover {
+    color: #333;
+}
+
+.modal-content p {
+    margin-bottom: 25px;
+    color: #555;
+    min-height: 60px;
+    font-size: 1.1em;
+    line-height: 1.5;
+}
+
+.modal-actions button {
+    margin: 0 8px;
+    padding: 0.7rem 1.2rem;
+}
+
+.modal-actions button.secondary {
+    background-color: #6c757d;
+}
+
+.modal-actions button.secondary:hover {
+    background-color: #5a6268;
+}
+
+.modal-actions button:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+    opacity: 0.7;
 }
