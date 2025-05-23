@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" href="./magneto_logo.jpeg" type="image/x-icon">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Magneto Empleos</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: sans-serif;
+      background: #f9fafb;
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+    }
+
+    header {
+      display: flex;
+      align-items: center;
+      padding: 1rem;
+      background: white;
+      border-bottom: 1px solid #ddd;
+    }
+
+    .logo {
+      margin-right: auto;
+      font-weight: bold;
+      color: #00b96b;
+    }
+
+    .search-bar {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: #f4f4f7;
+      border-radius: 10px;
+      padding: 0.5rem 1rem;
+      flex-grow: 1;
+      max-width: 800px;
+      margin: auto;
+      pointer-events: auto;
+    }
+
+    .search-bar input[type="text"],
+    .search-bar input[type="checkbox"],
+    .search-bar button,
+    .search-bar label {
+      pointer-events: auto;
+      cursor: auto;
+    }
+
+    .search-bar input[type="text"] {
+      border: none;
+      background: transparent;
+      outline: none;
+      width: 100%;
+      cursor: text;
+    }
+
+    main {
+      display: flex;
+      flex: 1;
+      overflow-y: hidden;
+    }
+
+    aside {
+      width: 250px;
+      background: #fff;
+      padding: 1rem;
+      border-right: 1px solid #ddd;
+      pointer-events: auto;
+      overflow-y: auto;
+    }
+
+    aside .box {
+      background: #f3f4f6;
+      padding: 1rem;
+      border-radius: 0.75rem;
+      margin-bottom: 1rem;
+    }
+
+    aside input {
+      pointer-events: auto;
+      cursor: text;
+      width: calc(100% - 1rem);
+      padding: 0.5rem;
+      box-sizing: border-box;
+    }
+
+    .job-list,
+    .job-detail {
+      flex: 1;
+      overflow-y: auto;
+      padding: 1rem;
+      pointer-events: auto;
+    }
+
+    .job-list {
+      border-right: 1px solid #ddd;
+    }
+
+    .job-list-header {
+      padding: 1rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #fff;
+      border-bottom: 1px solid #ddd;
+    }
+
+    .job-card {
+      padding: 1rem;
+      background: #e5e7eb;
+      margin: 1rem 0;
+      border-radius: 0.75rem;
+      cursor: pointer;
+      pointer-events: auto;
+      user-select: none;
+      transition: background-color 0.2s ease;
+    }
+
+    .job-card:hover {
+      background: #d1d5db;
+    }
+
+    .pill {
+      display: inline-block;
+      background: #f3f4f6;
+      color: #374151;
+      padding: 0.25rem 0.75rem;
+      border-radius: 9999px;
+      margin: 0.25rem;
+      font-size: 0.8rem;
+    }
+
+    button {
+      cursor: pointer;
+      background: #00b96b;
+      color: white;
+      border: none;
+      padding: 0.6rem 1rem;
+      border-radius: 6px;
+      font-size: 0.9rem;
+      transition: background-color 0.2s ease;
+    }
+
+    button:hover {
+      background: #029a5c;
+    }
+
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.65);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.3s ease, visibility 0.3s ease;
+    }
+
+    .modal-overlay.visible {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .modal-content {
+      background-color: #fff;
+      padding: 25px 30px;
+      border-radius: 10px;
+      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.25);
+      width: 90%;
+      max-width: 550px;
+      text-align: center;
+      position: relative;
+      transform: scale(0.95);
+      transition: transform 0.3s ease;
+    }
+
+    .modal-overlay.visible .modal-content {
+      transform: scale(1);
+    }
+
+    .modal-close-btn {
+      position: absolute;
+      top: 12px;
+      right: 15px;
+      font-size: 2rem;
+      color: #aaa;
+      cursor: pointer;
+      line-height: 1;
+      transition: color 0.2s ease;
+    }
+
+    .modal-close-btn:hover {
+      color: #333;
+    }
+
+    .modal-content h2 {
+      margin-top: 0;
+      margin-bottom: 15px;
+      color: #333;
+      font-size: 1.4em;
+    }
+
+    .modal-content p {
+      margin-bottom: 25px;
+      color: #555;
+      min-height: 60px;
+      font-size: 1.1em;
+      line-height: 1.5;
+    }
+
+    .modal-actions button {
+      margin: 0 8px;
+      padding: 0.7rem 1.2rem;
+    }
+
+    .modal-actions button.secondary {
+      background-color: #6c757d;
+    }
+
+    .modal-actions button.secondary:hover {
+      background-color: #5a6268;
+    }
+
+    .modal-actions button:disabled {
+      background-color: #cccccc;
+      cursor: not-allowed;
+      opacity: 0.7;
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <div class="logo">magneto <span style="color: #6b7280">empleos</span></div>
+    <div class="search-bar">
+      <input type="text" id="search" placeholder="Buscar empleo..." />
+      <label style="font-size: 0.9rem; display: inline-flex; align-items: center; white-space: nowrap;">
+        <input type="checkbox" id="fullVacanteOpt" style="margin-right: 0.3rem; cursor: pointer;" />
+        búsqueda completa
+      </label>
+      <button id="btnBuscar">Buscar Vacantes</button>
+      <button id="btnSugerir">Buscar con Sugerencias</button>
+    </div>
+  </header>
+  <main>
+    <aside>
+      <div class="box">
+        <strong>Filtrar empleos</strong>
+        <div style="margin-top: 1rem">
+          <label for="sectorFilter">Sector laboral</label> <input id="sectorFilter" placeholder="Buscar sector..."
+            style="width: 100%; margin-top: 0.5rem" />
+        </div>
+      </div>
+    </aside>
+    <section class="job-list">
+      <div class="job-list-header">
+        <strong id="resultCount">0 cupos</strong>
+      </div>
+      <div id="jobs">
+      </div>
+    </section>
+    <section class="job-detail" id="jobDetail">
+      <p>Selecciona una vacante para ver los detalles</p>
+    </section>
+  </main>
+
+  <script>
+    const jobsContainer = document.getElementById("jobs");
+    const jobDetail = document.getElementById("jobDetail");
+    const resultCount = document.getElementById("resultCount");
+    const searchInput = document.getElementById("search");
+    const btnBuscar = document.getElementById("btnBuscar");
+    const btnSugerir = document.getElementById("btnSugerir");
+    const fullVacanteOpt = document.getElementById("fullVacanteOpt");
+
+    let allJobs = [];
+    const intereses = [];
+
+    function buildWeightedVacancyText(intereses) {
+      if (!intereses || intereses.length === 0) return "";
+      return intereses.map(v => `${v.nombre_vacante} en ${v.empresa}, ${v.ubicacion}`).join('. ');
+    }
+
+    async function fetchJobs(term = "", opt = "porNombre") {
+      try {
+        const res = await fetch("http://localhost:5000/search", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ term, limit: 20, opt })
+        });
+        if (!res.ok) {
+          const errorData = await res.text();
+          console.error("Error en la respuesta del servidor:", res.status, errorData);
+          throw new Error(`Error del servidor: ${res.status}`);
+        }
+        allJobs = await res.json();
+        renderJobs(allJobs);
+      } catch (error) {
+        console.error("Error al cargar las ofertas:", error);
+        jobsContainer.innerHTML = '<p style="padding:1rem; color:red;">Error al cargar las ofertas. Intenta de nuevo más tarde.</p>';
+        jobDetail.innerHTML = "<p>No se pudieron cargar los detalles.</p>";
+        resultCount.textContent = "0 cupos";
+      }
+    }
+
+    const softSkillsModal = document.getElementById('softSkillsModal');
+    const softSkillQuestionTextEl = document.getElementById('softSkillQuestionText');
+    const prevSoftSkillBtn = document.getElementById('prevSoftSkillBtn');
+    const nextSoftSkillBtn = document.getElementById('nextSoftSkillBtn');
+    let closeSoftSkillModalButton;
+    const softSkillIndicatorEl = document.getElementById('softSkillIndicator');
+
+    const softSkillsQuestions = [
+      "Describe una situación en la que tuviste que resolver un problema complejo de forma creativa. ¿Cuál fue el resultado?",
+      "¿Cómo manejas el trabajo bajo presión o con plazos ajustados? Dame un ejemplo.",
+      "Cuéntame sobre una vez que trabajaste eficazmente como parte de un equipo para lograr un objetivo común. ¿Cuál fue tu rol?",
+      "¿Cómo te adaptas a los cambios inesperados en un proyecto o en el entorno laboral?",
+      "Describe un momento en el que tuviste que comunicarte de manera clara y persuasiva para convencer a alguien de tu punto de vista.",
+      "¿De qué manera buscas activamente oportunidades para aprender y desarrollar nuevas habilidades?",
+      "Relata una experiencia donde tomaste la iniciativa para mejorar un proceso o solucionar un problema sin que te lo pidieran.",
+      "¿Cómo priorizas tus tareas cuando tienes múltiples responsabilidades urgentes? ¿Qué estrategias utilizas?",
+      "Describe una ocasión en la que recibiste feedback constructivo. ¿Cómo reaccionaste y qué hiciste con esa información?",
+      "Háblame de una vez que enfrentaste un fracaso o un error. ¿Qué aprendiste de esa experiencia?"
+    ];
+    let currentSoftSkillIndex = 0;
+    let modalWasManuallyClosed = false;
+
+
+    function renderJobs(jobs) {
+      jobsContainer.innerHTML = "";
+      resultCount.textContent = `${jobs.length} cupos encontrados`;
+      if (jobs.length === 0) {
+        jobsContainer.innerHTML = "<p style='padding: 1rem;'>No se encontraron ofertas que coincidan con tu búsqueda.</p>";
+        jobDetail.innerHTML = "<p>Selecciona una vacante para ver los detalles</p>";
+      } else {
+        jobs.forEach((job) => {
+          const div = document.createElement("div");
+          div.className = "job-card";
+          div.innerHTML = `
+              <strong>${job.nombre_vacante || "Nombre no disponible"}</strong><br />
+              ${job.empresa || "Empresa no disponible"} | ${job.tipo_contrato?.tipo || "Tipo de contrato no especificado"}<br />
+              ${job.salario || "Salario no especificado"}, ${job.ubicacion || "Ubicación no especificada"}
+            `;
+          div.addEventListener("click", () => {
+            renderJobDetail(job);
+            intereses.push(job);
+            console.log(intereses)
+          });
+          jobsContainer.appendChild(div);
+        });
+      }
+
+      modalWasManuallyClosed = false;
+      if (typeof showSoftSkillsModal === "function") {
+        showSoftSkillsModal();
+      }
+    }
+
+    function renderJobDetail(job) {
+      const nombreVacante = job.nombre_vacante || "Detalles de la Vacante";
+      const empresa = job.empresa || "Empresa no especificada";
+      const tipoContrato = job.tipo_contrato?.tipo || "No especificado";
+      const salario = job.salario || "No especificado";
+      const ubicacion = job.ubicacion || "No especificada";
+      const experiencia = job.requisitos?.experiencia || "No especificada";
+      const palabrasClaveHTML = job.informacionAmpliada?.palabrasClave && Array.isArray(job.informacionAmpliada.palabrasClave)
+        ? job.informacionAmpliada.palabrasClave.map(k => `<span class="pill">${k}</span>`).join(" ")
+        : "No especificadas";
+
+      jobDetail.innerHTML = `
+        <h3>${nombreVacante}</h3>
+        <p><strong>Empresa:</strong> ${empresa}</p>
+        <p><strong>Tipo de Contrato:</strong> ${tipoContrato}</p>
+        <p><strong>Salario:</strong> ${salario}</p>
+        <p><strong>Ubicación:</strong> ${ubicacion}</p>
+        <p><strong>Experiencia Requerida:</strong> ${experiencia}</p>
+        <div><strong>Palabras clave:</strong><br />
+          ${palabrasClaveHTML}
+        </div>
+      `;
+    }
+
+    btnBuscar.addEventListener("click", () => {
+      const term = searchInput.value.trim();
+      const opt = fullVacanteOpt.checked ? "fullVacante" : "porNombre";
+      fetchJobs(term, opt);
+      jobDetail.innerHTML = "<p>Selecciona una vacante para ver los detalles</p>";
+    });
+
+    btnSugerir.addEventListener("click", () => {
+      if (intereses.length === 0) {
+        alert("Primero debes seleccionar algunas vacantes que te interesen para generar sugerencias.");
+        jobDetail.innerHTML = "<p>Haz clic en algunas vacantes para que podamos darte sugerencias.</p>";
+        return;
+      }
+      const term = buildWeightedVacancyText(intereses);
+      fetchJobs(term, "fullVacante");
+      jobDetail.innerHTML = "<p>Selecciona una vacante para ver los detalles</p>";
+    });
+
+    searchInput.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") {
+        e.preventDefault();
+        btnBuscar.click();
+      }
+    });
+
+    fetchJobs();
+
+    const modalElement = document.getElementById('softSkillsModal');
+    const questionTextElement = document.getElementById('softSkillQuestionText');
+    const prevButton = document.getElementById('prevSoftSkillBtn');
+    const nextButton = document.getElementById('nextSoftSkillBtn');
+    const closeButtonInModal = document.querySelector('#modal-close-btn');
+    const indicatorElement = document.getElementById('softSkillIndicator');
+
+
+    function updateSoftSkillQuestion() {
+
+      if (softSkillsQuestions.length > 0 && questionTextElement) {
+        questionTextElement.textContent = softSkillsQuestions[currentSoftSkillIndex];
+        indicatorElement.textContent = `Pregunta ${currentSoftSkillIndex + 1} de ${softSkillsQuestions.length}`;
+        prevButton.disabled = currentSoftSkillIndex === 0;
+        nextButton.disabled = currentSoftSkillIndex === softSkillsQuestions.length - 1;
+      } else if (questionTextElement) {
+        questionTextElement.textContent = "No hay preguntas disponibles en este momento.";
+        indicatorElement.textContent = "";
+        prevButton.disabled = true;
+        nextButton.disabled = true;
+      }
+    }
+
+    function showSoftSkillsModal() {
+      if (modalWasManuallyClosed || softSkillsQuestions.length === 0 || !modalElement) {
+        return;
+      }
+      currentSoftSkillIndex = 0;
+      updateSoftSkillQuestion();
+      modalElement.classList.add('visible');
+    }
+
+    function hideSoftSkillsModal(manualClose = false) {
+      if (!modalElement) return;
+      modalElement.classList.remove('visible');
+      if (manualClose) {
+        modalWasManuallyClosed = true;
+      }
+    }
+
+    if (prevButton) {
+      prevButton.addEventListener('click', () => {
+        if (currentSoftSkillIndex > 0) {
+          currentSoftSkillIndex--;
+          updateSoftSkillQuestion();
+        }
+      });
+    }
+
+    if (nextButton) {
+      nextButton.addEventListener('click', () => {
+        if (currentSoftSkillIndex < softSkillsQuestions.length - 1) {
+          currentSoftSkillIndex++;
+          updateSoftSkillQuestion();
+        }
+      });
+    }
+
+    if (closeButtonInModal) {
+      closeButtonInModal.addEventListener('click', () => hideSoftSkillsModal(true));
+    }
+
+    if (modalElement) {
+      modalElement.addEventListener('click', (event) => {
+        if (event.target === modalElement) {
+          hideSoftSkillsModal(true);
+        }
+      });
+    }
+
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape' && modalElement && modalElement.classList.contains('visible')) {
+        hideSoftSkillsModal(true);
+      }
+    });
+
+  </script>
+
+  <div id="softSkillsModal" class="modal-overlay">
+    <div class="modal-content">
+      <button class="modal-close-btn">Cerrar</button>
+      <h2>Reflexiona sobre tus Habilidades Blandas</h2>
+      <p id="softSkillQuestionText">Cargando pregunta...</p>
+      <div class="modal-actions">
+        <button id="prevSoftSkillBtn" class="secondary">Anterior</button>
+        <button id="nextSoftSkillBtn">Siguiente</button>
+      </div>
+      <div id="softSkillIndicator" style="font-size: 0.9em; color: #777; margin-top: 15px;"></div>
+    </div>
+  </div>
+</body>
+
+</html>
